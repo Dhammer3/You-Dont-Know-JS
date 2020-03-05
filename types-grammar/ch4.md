@@ -3,7 +3,13 @@
 
 | NOTE: |
 | :--- |
-| Work in progress |
+| Work in progress; |
+| highlight colors: <br /><mark style="background-color:#ffa442;"> orange |
+| <mark style="background-color:#42ff4b;"> green |
+| <mark style="background-color:#42f6ff;"> blue |
+| <mark style="background-color:#df42ff;"> purp |
+
+
 
 .
 
@@ -31,13 +37,13 @@ As we mentioned in Chapter 1, the debates over whether coercion is a useful feat
 
 In the same overall spirit of this book series, rather than running away from coercion because everyone else does, or because you get bitten by some quirk, I think you should run toward that which you don't understand and seek to *get it* more fully.
 
-Our goal is to fully explore the pros and cons (yes, there *are* pros!) of coercion, so that you can make an informed decision on its appropriateness in your program.
+Our goal is to fully explore the <mark>pros and cons (yes, there *are* pros!) of coercion</mark>, so that you can make an informed decision on its appropriateness in your program.
 
 ## Converting Values
 
 Converting a value from one type to another is often called "type casting," when done explicitly, and "coercion" when done implicitly (forced by the rules of how a value is used).
 
-**Note:** It may not be obvious, but JavaScript coercions always result in one of the scalar primitive (see Chapter 2) values, like `string`, `number`, or `boolean`. There is no coercion that results in a complex value like `object` or `function`. Chapter 3 covers "boxing," which wraps scalar primitive values in their `object` counterparts, but this is not really coercion in an accurate sense.
+**Note:** <mark>It may not be obvious, but JavaScript coercions always result in one of the scalar primitive (see Chapter 2) values, like `string`, `number`, or `boolean` </mark>. There is no coercion that results in a complex value like `object` or `function`. Chapter 3 covers "boxing," which wraps scalar primitive values in their `object` counterparts, but this is not really coercion in an accurate sense.
 
 Another way these terms are often distinguished is as follows: "type casting" (or "type conversion") occur in statically typed languages at compile time, while "type coercion" is a runtime conversion for dynamically typed languages.
 
@@ -45,7 +51,7 @@ However, in JavaScript, most people refer to all these types of conversions as *
 
 The difference should be obvious: "explicit coercion" is when it is obvious from looking at the code that a type conversion is intentionally occurring, whereas "implicit coercion" is when the type conversion will occur as a less obvious side effect of some other intentional operation.
 
-For example, consider these two approaches to coercion:
+<mark style="background-color:#df42ff;">For example, consider these two approaches to coercion:</mark>
 
 ```js
 var a = 42;
@@ -77,9 +83,9 @@ Before we can explore *explicit* vs *implicit* coercion, we need to learn the ba
 
 ### `ToString`
 
-When any non-`string` value is coerced to a `string` representation, the conversion is handled by the `ToString` abstract operation in section 9.8 of the specification.
+When any non-`string` value is coerced to a `string` representation, the conversion is handled by the `ToString` abstract operation in <mark style="background-color:#42ff4b;">section 9.8 of the specification. </mark>
 
-Built-in primitive values have natural stringification: `null` becomes `"null"`, `undefined` becomes `"undefined"` and `true` becomes `"true"`. `number`s are generally expressed in the natural way you'd expect, but as we discussed in Chapter 2, very small or very large `numbers` are represented in exponent form:
+<mark style="background-color:#42f6ff;">Built-in primitive values have natural stringification: `null` becomes `"null"`, `undefined` becomes `"undefined"` and `true` becomes `"true"`</mark>. `number`s are generally expressed in the natural way you'd expect, but as we discussed in Chapter 2, very small or very large `numbers` are represented in exponent form:
 
 ```js
 // multiplying `1.07` by `1000`, seven times over
@@ -109,7 +115,7 @@ Again, `toString()` can either be called explicitly, or it will automatically be
 
 Another task that seems awfully related to `ToString` is when you use the `JSON.stringify(..)` utility to serialize a value to a JSON-compatible `string` value.
 
-It's important to note that this stringification is not exactly the same thing as coercion. But since it's related to the `ToString` rules above, we'll take a slight diversion to cover JSON stringification behaviors here.
+It's important to note that this<mark style="background-color:#42f6ff;"> stringification is not exactly the same thing as coercion</mark>. But since it's related to the `ToString` rules above, we'll take a slight diversion to cover JSON stringification behaviors here.
 
 For most simple values, JSON stringification behaves basically the same as `toString()` conversions, except that the serialization result is *always a `string`*:
 
@@ -120,9 +126,11 @@ JSON.stringify( null );	// "null"
 JSON.stringify( true );	// "true"
 ```
 
-Any *JSON-safe* value can be stringified by `JSON.stringify(..)`. But what is *JSON-safe*? Any value that can be represented validly in a JSON representation.
+Any <mark style="background-color:#42f6ff;">*JSON-safe*</mark> value can be stringified by `JSON.stringify(..)`. <mark style="background-color:#42ff4b;">But what is *JSON-safe*?</mark>
 
-It may be easier to consider values that are **not** JSON-safe. Some examples: `undefined`s, `function`s, (ES6+) `symbol`s, and `object`s with circular references (where property references in an object structure create a never-ending cycle through each other). These are all illegal values for a standard JSON structure, mostly because they aren't portable to other languages that consume JSON values.
+ Any value that can be represented validly in a JSON representation.
+
+It may be easier to consider values that are<mark> **not** </mark>JSON-safe. Some examples: `undefined`s, `function`s, (ES6+) `symbol`s, and `object`s with circular references (where property references in an object structure create a never-ending cycle through each other). These are all illegal values for a standard JSON structure, mostly because they aren't portable to other languages that consume JSON values.
 
 The `JSON.stringify(..)` utility will automatically omit `undefined`, `function`, and `symbol` values when it comes across them. If such a value is found in an `array`, that value is replaced by `null` (so that the array position information isn't altered). If found as a property of an `object`, that property will simply be excluded.
 
@@ -137,6 +145,8 @@ JSON.stringify( { a:2, b:function(){} } );		// "{"a":2}"
 ```
 
 But if you try to `JSON.stringify(..)` an `object` with circular reference(s) in it, an error will be thrown.
+
+<mark style="background-color:#42ff4b;">**EDIT** maybe dont make objs with circular refs in them..?</mark>
 
 JSON stringification has the special behavior that if an `object` value has a `toJSON()` method defined, this method will be called first to get a value to use for serialization.
 
@@ -268,7 +278,9 @@ Remember, `JSON.stringify(..)` is not directly a form of coercion. We covered it
 
 If any non-`number` value is used in a way that requires it to be a `number`, such as a mathematical operation, the ES5 spec defines the `ToNumber` abstract operation in section 9.3.
 
-For example, `true` becomes `1` and `false` becomes `0`. `undefined` becomes `NaN`, but (curiously) `null` becomes `0`.
+<mark style="background-color:#42ff4b;">For example, `true` becomes `1` and `false` becomes `0`. `undefined` becomes `NaN`, but (curiously) `null` becomes `0`.</mark>
+
+
 
 `ToNumber` for a `string` value essentially works for the most part like the rules/syntax for numeric literals (see Chapter 3). If it fails, the result is `NaN` (instead of a syntax error as with `number` literals). One example difference is that `0`-prefixed octal numbers are not handled as octals (just as normal base-10 decimals) in this operation, though such octals are valid as `number` literals (see Chapter 2).
 
