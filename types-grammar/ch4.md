@@ -343,7 +343,7 @@ I'm not just being facetious. The JS spec defines a specific, narrow list of val
 
 How do we know what the list of values is? In the ES5 spec, section 9.2 defines a `ToBoolean` abstract operation, which says exactly what happens for all the possible values when you try to coerce them "to boolean."
 
-From that table, we get the following as the so-called "falsy" values list:
+<mark style="background-color:#ffa442;">From that table, we get the following as the so-called "falsy" values list</mark>:
 
 * `undefined`
 * `null`
@@ -393,7 +393,7 @@ The tricky part is that they can show up in your JS program, but they're not act
 
 There are certain cases where browsers have created their own sort of *exotic* values behavior, namely this idea of "falsy objects," on top of regular JS semantics.
 
-A "falsy object" is a value that looks and acts like a normal object (properties, etc.), but when you coerce it to a `boolean`, it coerces to a `false` value.
+<mark style="background-color:#df42ff;"> A "falsy object" is a value that looks and acts like a normal object (properties, etc.), but when you coerce it to a `boolean`, it coerces to a `false` value.</mark>
 
 **Why!?**
 
@@ -447,7 +447,7 @@ var d = Boolean( a && b && c );
 d;
 ```
 
-Yep, you guessed it, `d` is still `true` here. Why? Same reason as before. Despite what it may seem like, `[]`, `{}`, and `function(){}` are *not* on the falsy list, and thus are truthy values.
+Yep, you guessed it, `d` is still `true` here. Why? Same reason as before. <mark style="background-color:#df42ff;"> Despite what it may seem like, `[]`, `{}`, and `function(){}` are *not* on the falsy list, and thus are truthy values.</mark>
 
 In other words, the truthy list is infinitely long. It's impossible to make such a list. You can only make a finite falsy list and consult *it*.
 
@@ -503,13 +503,17 @@ b; // "42"
 d; // 3.14
 ```
 
-Calling `a.toString()` is ostensibly explicit (pretty clear that "toString" means "to a string"), but there's some hidden implicitness here. `toString()` cannot be called on a *primitive* value like `42`. So JS automatically "boxes" (see Chapter 3) `42` in an object wrapper, so that `toString()` can be called against the object. In other words, you might call it "explicitly implicit."
+Calling `a.toString()` is ostensibly explicit (pretty clear that "toString" means "to a string"), but there's some hidden implicitness here. <mark style="background-color:#df42ff;"> `toString()` cannot be called on a *primitive* value like `42`. So JS automatically "boxes" (see Chapter 3) `42` in an object wrapper, so that `toString()` can be called against the object. In other words, you might call it "explicitly implicit."</mark>
+
+
 
 `+c` here is showing the *unary operator* form (operator with only one operand) of the `+` operator. Instead of performing mathematic addition (or string concatenation -- see below), the unary `+` explicitly coerces its operand (`c`) to a `number` value.
 
 Is `+c` *explicit* coercion? Depends on your experience and perspective. If you know (which you do, now!) that unary `+` is explicitly intended for `number` coercion, then it's pretty explicit and obvious. However, if you've never seen it before, it can seem awfully confusing, implicit, with hidden side effects, etc.
 
-**Note:** The generally accepted perspective in the open-source JS community is that unary `+` is an accepted form of *explicit* coercion.
+**Note:** The generally accepted perspective in the open-source JS community is that unary `+` is an accepted form of <mark style="background-color:#df42ff;"> *explicit* coercion.</mark>
+
+
 
 Even if you really like the `+c` form, there are definitely places where it can look awfully confusing. Consider:
 
@@ -528,11 +532,11 @@ You can probably dream up all sorts of hideous combinations of binary operators 
 1 + - + + + - + 1;	// 2
 ```
 
-You should strongly consider avoiding unary `+` (or `-`) coercion when it's immediately adjacent to other operators. While the above works, it would almost universally be considered a bad idea. Even `d = +c` (or `d =+ c` for that matter!) can far too easily be confused for `d += c`, which is entirely different!
+<mark style="background-color:#df42ff;"> You should strongly consider avoiding unary `+` (or `-`) coercion when it's immediately adjacent to other operators.</mark> While the above works, it would almost universally be considered a bad idea. Even `d = +c` (or `d =+ c` for that matter!) can far too easily be confused for `d += c`, which is entirely different!
 
 **Note:** Another extremely confusing place for unary `+` to be used adjacent to another operator would be the `++` increment operator and `--` decrement operator. For example: `a +++b`, `a + ++b`, and `a + + +b`. See "Expression Side-Effects" in Chapter 5 for more about `++`.
 
-Remember, we're trying to be explicit and **reduce** confusion, not make it much worse!
+Remember, we're<mark style="background-color:#df42ff;">  trying to be explicit and **reduce** confusion, </mark> not make it much worse!
 
 #### `Date` To `number`
 
@@ -666,7 +670,7 @@ if (!~a.indexOf( "ol" )) {	// true
 }
 ```
 
-`~` takes the return value of `indexOf(..)` and transforms it: for the "failure" `-1` we get the falsy `0`, and every other value is truthy.
+<mark style="background-color:#df42ff;"> `~` takes the return value of `indexOf(..)` and transforms it: for the "failure" `-1` we get the falsy `0`, and every other value is truthy.</mark>
 
 **Note:** The `-(x+1)` pseudo-algorithm for `~` would imply that `~-1` is `-0`, but actually it produces `0` because the underlying operation is actually bitwise, not mathematic.
 
@@ -682,7 +686,7 @@ How `~~` works is that the first `~` applies the `ToInt32` "coercion" and does t
 
 **Note:** The bitwise double-flip of `~~` is very similar to the parity double-negate `!!` behavior, explained in the "Explicitly: * --> Boolean" section later.
 
-However, `~~` needs some caution/clarification. First, it only works reliably on 32-bit values. But more importantly, it doesn't work the same on negative numbers as `Math.floor(..)` does!
+However, `~~` needs some caution/clarification. First, <mark style="background-color:#df42ff;"> it only works reliably on 32-bit values. But more importantly, it doesn't work the same on negative numbers as `Math.floor(..)` does! </mark>
 
 ```js
 Math.floor( -49.6 );	// -50
@@ -842,7 +846,9 @@ Boolean( g ); // false
 
 While `Boolean(..)` is clearly explicit, it's not at all common or idiomatic.
 
-Just like the unary `+` operator coerces a value to a `number` (see above), the unary `!` negate operator explicitly coerces a value to a `boolean`. The *problem* is that it also flips the value from truthy to falsy or vice versa. So, the most common way JS developers explicitly coerce to `boolean` is to use the `!!` double-negate operator, because the second `!` will flip the parity back to the original:
+Just like the unary `+` operator coerces a value to a `number` (see above), <mark style="background-color:#df42ff;"> the unary `!` negate operator explicitly coerces a value to a `boolean`. </mark> The *problem* is that it also flips the value from truthy to falsy or vice versa.<mark style="background-color:#df42ff;">  So, the most common way JS developers explicitly coerce to `boolean` is to use the `!!` double-negate operator, because the second `!` will flip the parity back to the original:</mark>
+
+
 
 ```js
 var a = "0";
@@ -902,9 +908,9 @@ The `? :` ternary operator will test `a` for truthiness, and based on that test 
 
 On its surface, this idiom looks like a form of *explicit* `ToBoolean`-type coercion, since it's obvious that only either `true` or `false` come out of the operation.
 
-However, there's a hidden *implicit* coercion, in that the `a` expression has to first be coerced to `boolean` to perform the truthiness test. I'd call this idiom "explicitly implicit." Furthermore, I'd suggest **you should avoid this idiom completely** in JavaScript. It offers no real benefit, and worse, masquerades as something it's not.
+However, <mark>there's a hidden *implicit* coercion,</mark> in that the `a` expression has to first be coerced to `boolean` to perform the truthiness test. I'd call this idiom "explicitly implicit." Furthermore, I'd suggest **you should avoid this idiom completely** in JavaScript. It offers no real benefit, and worse, masquerades as something it's not.
 
-`Boolean(a)` and `!!a` are far better as *explicit* coercion options.
+<mark style="background-color:#df42ff;"> ` Boolean(a)` and `!!a` are far better as *explicit* coercion options.</mark>
 
 ## Implicit Coercion
 
@@ -1236,7 +1242,7 @@ a ? b : a;
 
 **Note:** I call `a || b` "roughly equivalent" to `a ? a : b` because the outcome is identical, but there's a nuanced difference. In `a ? a : b`, if `a` was a more complex expression (like for instance one that might have side effects like calling a `function`, etc.), then the `a` expression would possibly be evaluated twice (if the first evaluation was truthy). By contrast, for `a || b`, the `a` expression is evaluated only once, and that value is used both for the coercive test as well as the result value (if appropriate). The same nuance applies to the `a && b` and `a ? b : a` expressions.
 
-An extremely common and helpful usage of this behavior, which there's a good chance you may have used before and not fully understood, is:
+<mark>An extremely common and helpful usage of this behavior, which there's a good chance you may have used before and not fully understood, is:</mark>
 
 ```js
 function foo(a,b) {
@@ -1266,7 +1272,7 @@ This *default value assignment* idiom is so common (and useful!) that even those
 
 What about `&&`?
 
-There's another idiom that is quite a bit less commonly authored manually, but which is used by JS minifiers frequently. The `&&` operator "selects" the second operand if and only if the first operand tests as truthy, and this usage is sometimes called the "guard operator" (also see "Short Circuited" in Chapter 5) -- the first expression test "guards" the second expression:
+There's another idiom that is quite a bit less commonly authored manually, but which is used by JS minifiers frequently. <mark>The `&&` operator "selects" the second operand if and only if the first operand tests as truthy, and this usage is sometimes called the "guard operator" (also see "Short Circuited" in Chapter 5) -- the first expression test "guards" the second expression:</mark>
 
 ```js
 function foo() {
@@ -1358,7 +1364,7 @@ If you're comparing two values of the same types, `==` and `===` use the identic
 
 If you're comparing two values of different types, the performance isn't the important factor. What you should be asking yourself is: when comparing these two values, do I want coercion or not?
 
-If you want coercion, use `==` loose equality, but if you don't want coercion, use `===` strict equality.
+<mark>If you want coercion, use `==` loose equality, but if you don't want coercion, use `===` strict equality.</mark>
 
 **Note:** The implication here then is that both `==` and `===` check the types of their operands. The difference is in how they respond if the types don't match.
 
